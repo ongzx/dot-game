@@ -1,9 +1,9 @@
 import "./Styles/styles.scss";
 import {
-  removeEl,
-  getRandomNum10,
+  removeElement,
+  generateRandomNum10,
   calcDotValue,
-  getRandomNum
+  generateRandomNum
 } from "./helper.js";
 
 // shim layer with setTimeout fallback
@@ -33,7 +33,7 @@ class dotGame {
     this.scoreLabel = document.getElementById("score");
     this.gameBtn = document.getElementById("game-btn");
     this.speedController = document.getElementById("speed");
-    this.speedLabel = document.getElementById("label-speed");
+    this.speedLabel = document.getElementById("speed-value");
   }
 
   init() {
@@ -48,12 +48,17 @@ class dotGame {
   }
 
   setSpeed() {
-    this.speedLabel.innerHTML = `x${this.getSpeed()}`;
+    const speed = this.getSpeed();
+    this.speedLabel.innerHTML = `${speed === 100 ? 'Max' : speed }`;
   }
 
   setScore(score) {
     this.userScore += score;
     this.scoreLabel.innerHTML = this.userScore;
+    this.scoreLabel.classList.add('bounce');
+    setTimeout(() => {
+      this.scoreLabel.classList.remove('bounce');
+    }, 200);
   }
 
   animateDots() {
@@ -66,7 +71,7 @@ class dotGame {
         velocity = (positionY += fps);
 
       if (positionY > playgroundHeight) {
-        removeEl(dots[i]);
+        removeElement(dots[i]);
       }
       dots[i].style.top = velocity + "px";
     }
@@ -78,11 +83,11 @@ class dotGame {
    */
   populateDots() {
     const playground = document.getElementById("playground");
-    const dotSize = getRandomNum10(10, 100);
+    const dotSize = generateRandomNum10(10, 100);
     const dotValue = calcDotValue(dotSize);
     const playgroundWidth = document.getElementById("playground").offsetWidth;
-    const maxWidth = playgroundWidth - 100;
-    const leftPosition = getRandomNum(0, maxWidth);
+    const maxWidth = playgroundWidth - 100; // 100 is the max dot width
+    const leftPosition = generateRandomNum(0, maxWidth);
     const topPosition = 0 - dotSize - this.getSpeed();
     const color = this.dotColors[
       Math.floor(Math.random() * this.dotColors.length)
@@ -106,15 +111,14 @@ class dotGame {
     if (this.isPlaying) {
       setTimeout(() => {
         this.setScore(dotValue);
-        removeEl(el);
+        removeElement(el);
       }, 10);
     }
   }
 
   stop() {
     this.isPlaying = false;
-    this.gameBtn.innerHTML = "Start";
-    this.gameBtn.classList.add("start");
+    this.gameBtn.classList.add("play");
     this.gameBtn.classList.remove("pause");
     clearInterval(this.dotPopulationInterval);
     cancelAnimationFrame(this.dotAnimationId);
@@ -122,9 +126,8 @@ class dotGame {
 
   start() {
     this.isPlaying = true;
-    this.gameBtn.innerHTML = "Pause";
     this.gameBtn.classList.add("pause");
-    this.gameBtn.classList.remove("start");
+    this.gameBtn.classList.remove("play");
     this.dotPopulationInterval = setInterval(
       () => this.populateDots(),
       this.dotFrequency

@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  background-color: $white;
+  background-color: $black;
   width: 100%;
   min-height: 100%;
   display: flex;
@@ -16,6 +16,7 @@ body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
 }
+
 
 #dot-game-app {
   width: 768px;
@@ -27,72 +28,97 @@ body {
   -moz-animation: bgGradient 60s ease infinite;
   animation: bgGradient 60s ease infinite;
   position: relative;
-  border: 5px solid #000;
+  border: 5px solid $black;
   position: relative;
+  
   #control-panel {
-    display: flex;
     width: 100%;
-    flex-direction: row;
-    justify-content: center;
-    align-items: stretch;
     position: absolute;
     left: 0px;
     bottom: 0px;
-    height: 50px;
+    z-index: 2;
     background-color: $black05;
     color: $black;
     overflow: hidden;
-    padding: 10px;
-    z-index: 2;
-
+    
     #game-btn {
-      display: block;
-      color: $white;
-      font-size: 12px;
-      text-transform: uppercase;
-      text-align: center;
-      //   text-shadow: 0px 2px 1px rgba(0, 0, 0, 0.2);
-      transition: color 0.5s ease;
+      position: relative;
+      display: flex;
+      width: 40px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      @include no_highlight;
+      transition: border 0.1s ease-in-out;
+      
       &:hover {
-        cursor: pointer;
-      }
-      &:active {
-        color: $secondary;
-      }
-      &.start {
-        color: $white;
-        &:hover {
-          color: lighten($primary, 8);
+        .bar {
+          background-color: $primary;	
         }
       }
+      
+      .bar {
+        display: inline-block;
+        position: absolute;
+        top: 10px;
+        left: 0;
+        width: 3px;
+        height: 15px;
+        border-radius: 3px;
+        background-color: $white;
+        transform-origin: center;
+        transition: transform 0.4s ease-in-out, background 0.1s ease-in-out;
+      }
+      
       &.pause {
-        color: $secondary;
-        &:hover {
-          color: lighten($secondary, 8);
+        .bar-1 {
+          transform: translateX(6.5px) translateY(-8px) rotate(0deg);
+        }
+        .bar-2 {
+          transform: translateX(16px) translateY(-8px) rotate(0deg);
         }
       }
+      
+      &.play {
+        .bar-1 {
+          transform: translateX(13px) translateY(-11px) rotate(-55deg);
+        }
+        .bar-2 {
+          transform: translateX(13px) translateY(-3px) rotate(-125deg);
+        }
+      }
+      
     }
 
     #slider {
       display: flex;
       flex: 1;
-      // flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
+      flex-direction: row;
+      align-items: center;
+      padding: 10px;
+      justify-content: space-between;
+
+      #label-speed {
+        color: $white;
+        font-size: 12px;
+        min-width: 40px;
+        text-align: center
+      }
+
+      #speed-value {
+        color: $white;
+        font-size: 12px;
+        min-width: 40px;
+        text-align: center;
+      }
 
       input[type="range"] {
+        display: flex;
+        flex: 1;
+        margin-left: 10px;
+        margin-right: 10px;
         -webkit-appearance: none;
         -moz-appearance: none;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 80%;
-        transform: translate(-50%, -50%);
-        // display: flex;
-        // flex: 1;
-        // font-size: 14px;
-        // // transform: rotate(270deg);
-        // cursor: pointer;
       }
 
       input[type=range]::-webkit-slider-runnable-track {
@@ -105,7 +131,7 @@ body {
         background: -ms-linear-gradient(45deg, rgba(59,173,227,1) 0%, rgba(87,111,230,1) 25%, rgba(152,68,183,1) 51%, rgba(255,53,127,1) 100%);
         background: linear-gradient(45deg, rgba(59,173,227,1) 0%, rgba(87,111,230,1) 25%, rgba(152,68,183,1) 51%, rgba(255,53,127,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3bade3 ', endColorstr='#ff357f ', GradientType=1 );
-        height: 2px;
+        height: 10px;
       }
       
       input[type=range]:focus {
@@ -122,18 +148,18 @@ body {
         background: -ms-linear-gradient(45deg, rgba(59,173,227,1) 0%, rgba(87,111,230,1) 25%, rgba(152,68,183,1) 51%, rgba(255,53,127,1) 100%);
         background: linear-gradient(45deg, rgba(59,173,227,1) 0%, rgba(87,111,230,1) 25%, rgba(152,68,183,1) 51%, rgba(255,53,127,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3bade3 ', endColorstr='#ff357f ', GradientType=1 );
-        height: 2px;
+        height: 10px;
       }
       
       input[type=range]::-webkit-slider-thumb {
         -webkit-appearance: none;
         border: 2px solid;
         border-radius: 50%;
-        height: 25px;
-        width: 25px;
+        height: 20px;
+        width: 20px;
         max-width: 80px;
         position: relative;
-        bottom: 11px;
+        bottom: 6px;
         background-color: #1d1c25;
         cursor: -webkit-grab;
         -webkit-transition: border 1000ms ease;
@@ -144,11 +170,11 @@ body {
         -moz-appearance: none;
         border: 2px solid;
         border-radius: 50%;
-        height: 25px;
-        width: 25px;
+        height: 20px;
+        width: 20px;
         max-width: 80px;
         position: relative;
-        bottom: 11px;
+        bottom: 6px;
         background-color: #1d1c25;
         cursor: -moz-grab;
         -moz-transition: border 1000ms ease;
@@ -212,28 +238,16 @@ body {
       font-size: 16px;
       vertical-align: middle;
     }
-  }
-
-  #label-speed {
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    color: $white;
-    padding: 10px 10px;
-    background-color: #000;
-    opacity: 0.5;
-    margin: 10px;
-    font-size: 12px;
-    &::before {
-      content: 'Speed: ';
+    &.bounce {
+      -webkit-animation: bounce 0.2s ease;
+      -moz-animation: bounce 0.2s ease;
+      animation: bounce 0.2s ease;
     }
   }
 
   #playground {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex: 1;
     .dot {
       width: 6px;
       height: 6px;
@@ -249,8 +263,10 @@ body {
         z-index: 1;
       }
 
-      & .destroyed {
-
+      &.destroyed {
+        -webkit-animation: pulse-fade 0.5s ease;
+        -moz-animation: pulse-fade 0.5s ease;
+        animation: pulse-fade 0.5s ease;
       }
     }
   }

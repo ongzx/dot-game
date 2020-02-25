@@ -7,13 +7,17 @@
     <body>
         <div id="dot-game-app">
             <div id="control-panel">
-                <div id="game-btn" class="start">Start</div>
                 <div id="slider">
+                    <div id="game-btn" class="btn play">
+                        <span class="bar bar-1"></span>
+                        <span class="bar bar-2"></span>				
+                    </div>
+                    <label id="label-speed">Speed</label>
                     <input id="speed" type="range" min="10" max="100" value="0" class="range blue"/>
+                    <label id="speed-value"></label>
                 </div>
             </div>
             <label id="score"></label>
-            <label id="label-speed"></label>
             <div id="playground"></div>
         </div>
     </body>
